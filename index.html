@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de URLs</title>
+</head>
+<body>
+    <h1>Generador de URLs</h1>
+    <form id="urlForm">
+        <label for="cantidadUrls">Cantidad de URLs a generar:</label>
+        <input type="number" id="cantidadUrls" name="cantidadUrls" min="1" value="1">
+        <button type="submit">Generar URLs</button>
+    <form id="urlForm">
+    <label for="cantidadUrls">Cantidad de URLs a generar:</label>
+    <input type="number" id="cantidadUrls" name="cantidadUrls" min="1" value="1">
+    <button type="submit">Generar URLs</button>
+</form>
+<div id="urlContainer">
+    <!-- Aquí se mostrarán las URLs generadas -->
+</div>
+
+<script>
+    document.getElementById('urlForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Obtener la cantidad de URLs ingresadas por el usuario
+        const cantidadUrls = document.getElementById('cantidadUrls').value;
+
+        // Llamar a la función para generar URLs
+        generarUrls(cantidadUrls);
+    });
+
+    function generarUrls(cantidad) {
+        fetch(`/api/generateUrls?cantidadUrls=${cantidad}`)
+            .then(response => response.json())
+            .then(data => {
+                const urlContainer = document.getElementById('urlContainer');
+                urlContainer.innerHTML = ''; // Limpiar contenido anterior
+
+                data.urls.forEach(url => {
+                    const urlElement = document.createElement('p');
+                    urlElement.textContent = url;
+                    urlContainer.appendChild(urlElement);
+                });
+            })
+            .catch(error => console.error('Error al generar URLs:', error));
+    }
+</script>
+</body>
+</html>
